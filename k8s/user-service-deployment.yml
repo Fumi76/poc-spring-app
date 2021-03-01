@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: xxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/poc-spring-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: "xray-service.default:2000"
+        args:
+          - --server.port=5000
+          - --myServiceName=user-service
+          - -Dspring.main.banner-mode=off

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front-service
+  template:
+    metadata:
+      labels:
+        app: front-service
+    spec:
+      containers:
+      - name: front-service
+        image: xxxxxxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/poc-spring-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6000
+        env:
+        - name: AWS_XRAY_DAEMON_ADDRESS
+          value: "xray-service.default:2000"
+        args:
+          - --server.port=6000
+          - --myServiceName=front-service
